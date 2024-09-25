@@ -10,7 +10,7 @@ const Card = (promps) => {
     color =
       "bg-[url('https://i.pinimg.com/originals/40/c8/78/40c87825702a67b2d462d57fc4d60d91.jpg')] bg-cover bg-center";
   } else if (colorRecibido == "BLACK") {
-    color = "bg-[url('/public/cardBlack.jpg')] bg-cover bg-center";
+    color = "bg-[url('https://imgs.search.brave.com/4X_hVHnKf_QPtugGB_EpcGFbsIuSKcA7K6JqObSYEe0/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9tZWRp/YS5pc3RvY2twaG90/by5jb20vaWQvMTg1/MDY4MDMzL3Bob3Rv/L2JsYWNrLWJydXNo/ZWQtbWV0YWwtdGV4/dHVyZS5qcGc_cz02/MTJ4NjEyJnc9MCZr/PTIwJmM9LUctYmJ1/R05HVTEtMllqTXpD/YjQyR3ZNc0dFczFv/cFVXM200N01jb0xz/cz0')] bg-cover bg-center";
   }else if(colorRecibido == "SILVER"){
     color = "bg-[url('https://media.istockphoto.com/id/679479658/photo/silver-foil-texture-background.jpg?s=612x612&w=0&k=20&c=8M_Mo9Ig_OFsr4wTFtfZq8KziQYewrQEtuMCk250N7A=')] bg-cover bg-center";
   }
