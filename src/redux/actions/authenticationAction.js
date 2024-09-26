@@ -9,7 +9,7 @@ export const loadClient = createAsyncThunk(
   
       try {
         const response = await axios.get(
-          "http://localhost:8080/api/auth/current",
+          "https://homebanking-42y9.onrender.com/api/auth/current",
           {
             headers: { Authorization: `Bearer ${token}` },
           }
@@ -34,7 +34,7 @@ export const loadClient = createAsyncThunk(
       const token = localStorage.getItem("token");
       try {
         const response = await axios.get(
-          "http://localhost:8080/api/clients/current/cards", // Cambia esta URL a la correcta en tu backend
+          "https://homebanking-42y9.onrender.com/api/clients/current/cards", // Cambia esta URL a la correcta en tu backend
           null, // Datos de la nueva tarjeta
           {
             headers: { Authorization: `Bearer ${token}` },
@@ -57,7 +57,7 @@ export const loadClient = createAsyncThunk(
   
       try {
         const response = await axios.post(
-          "http://localhost:8080/api/accounts/clients/current/accounts", // URL del backend
+          "https://homebanking-42y9.onrender.com/api/accounts/clients/current/accounts", // URL del backend
           newAccount, // Los datos de la nueva cuenta
           {
             headers: { Authorization: `Bearer ${token}` }, // Encabezado con el token
