@@ -18,7 +18,6 @@ const SignUpForm = () => {
   const [successMessage, setSuccessMessage] = useState("");
 
   const navigate = useNavigate(); // Inicializa useNavigate
-  const dispatch = useDispatch();
 
 const handleSignUp = async(e) => {
   e.preventDefault();
