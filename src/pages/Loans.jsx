@@ -20,6 +20,10 @@ const Loans = () => {
   const [availableLoans, setAvailableLoans] = useState([]);
 
   const [errorMessage, setErrorMessage] = useState(""); // Estado para mensajes de error
+  const [amountError, setAmountError] = useState("");
+  const [paymentError, setPaymentError] = useState("");
+  const [sourceAccountError, setSourceAccountError] = useState("");
+  const [typeError, setTypeError] = useState("");
   const [successMessage, setSuccessMessage] = useState(""); // Estado para mensaje de éxito
 
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -78,16 +82,6 @@ const Loans = () => {
     setAccount(event.target.value);
   };
 
-  // Validar el monto del préstamo según el monto máximo permitido
-  const handleAmountChange = (event) => {
-    const inputAmount = Number(event.target.value);
-    if (inputAmount <= maxAmount) {
-      setAmount(inputAmount);
-    } else {
-      alert(`The maximum allowed amount for this loan is ${maxAmount}`);
-    }
-  };
-
   const loanDetails = {
     id:
       type === "Mortgage"
@@ -104,21 +98,33 @@ const Loans = () => {
 
   const handleOpenModal = (event) => {
     event.preventDefault();
+    if (!type || type <= 0) {
+      setTypeError("Please enter a valid type.");
+      return;
+    }setTypeError("");
+    if (!account) {
+      setSourceAccountError("Please enter a valid account.");
+      return;
+    }setSourceAccountError("");
     if (!amount || amount <= 0) {
-      setErrorMessage("Please enter a valid amount.");
+      setAmountError("Please enter a valid amount.");
       return;
-    }
-    if (amount > maxAmount) {
-      setErrorMessage(`Exceeds the allowed amount (${maxAmount}).`);
+    }setAmountError("");
+    if (amount < amount) {
+      setAmountError(`Exceeds the allowed amount (${amount}).`);
       return;
-    }
+    }setAmountError("");
     if (!selectedPayment || selectedPayment <= 0) {
-      setErrorMessage("Please enter valid installments.");
+      setPaymentError("Please enter valid installments.");
       return;
-    }
+    }setPaymentError("");
     // Abrir el modal de confirmación
     setIsModalOpen(true);
     setErrorMessage(""); // Limpiar mensajes de error si los hay
+    
+    
+    
+    
   };
 
   const handleConfirm = () => {
@@ -137,18 +143,12 @@ const Loans = () => {
       })
       .catch((error) => {
         console.error("Error fetching data:", error);
+        ConfirmationModal(error.response.data); 
       });
     setIsModalOpen(false);
   };
-   // Manejar el cambio en el campo de entrada del monto
-   const handleAmountChangeInput = (e) => {
-    const inputValue = e.target.value;
-    const cleanValue = cleanNumber(inputValue);  // Elimina las comas del valor ingresado
 
-    // Actualiza el estado formateando el número con comas
-    setAmount(formatNumberWithCommas(cleanValue));
-  };
-// Función para formatear el número con comas
+  // Función para formatear el número con comas
 const formatNumberWithCommas = (num) => {
   if (!num) return '';
   const parts = num.toString().split('.');
@@ -209,9 +209,16 @@ const cleanNumber = (num) => {
               <FormContainer
                 title="Loan Application Form"
                 description="Select your loan type, source account, amount, and number of installments."
-              >
-                {errorMessage && (
-                  <p className="text-red-500 text-sm mb-4">{errorMessage}</p>
+              >{typeError && (
+                <p className="text-red-500 text-sm mb-4">{typeError}</p>
+              )}    {sourceAccountError && (
+                <p className="text-red-500 text-sm mb-4">{sourceAccountError}</p>
+              )}
+                  {amountError && (
+                  <p className="text-red-500 text-sm mb-4">{amountError}</p>
+                )}
+                    {paymentError && (
+                  <p className="text-red-500 text-sm mb-4">{paymentError}</p>
                 )}
                 {successMessage && (
                   <p className="text-green-500 text-sm mb-4">{successMessage}</p>
@@ -226,6 +233,7 @@ const cleanNumber = (num) => {
                   campo="nameLoan"
                   onChange={handleLoanTypeChange}
                 />
+                  
                 <SelectField
                   options={client.accounts?.map((account) => ({
                     label: account.number,
@@ -235,15 +243,17 @@ const cleanNumber = (num) => {
                   className="mb-4"
                   onChange={handleAccountChange}
                 />
+                 
                 {maxAmount && (
                   <InputField
                     type="text"
                     placeholder={`Enter Amount (max: ${maxAmount})`}
                     value={amount}
-                    onChange={handleAmountChangeInput}
+                    onChange={(e)=>setAmount(e.target.value)}
                     className="mb-4"
                   />
                 )}
+                 
                 {payments.length > 0 && (
                   <SelectField
                     options={payments.map((payment) => ({
@@ -256,6 +266,7 @@ const cleanNumber = (num) => {
                     className="mb-6"
                   />
                 )}
+                 
                 <ButtonSubmit label="Apply Now" onClick={handleOpenModal} />
               </FormContainer>
             </div>

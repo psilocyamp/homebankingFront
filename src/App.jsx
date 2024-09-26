@@ -8,6 +8,7 @@ import Transactions from "./pages/Transactions";
 import LogIn from "./pages/LogIn";
 import SignUp from "./pages/SignUp";
 import ApplyCard from "./pages/ApplyCard";
+import Home from "./pages/Home";
 
 
 import MainLayout from "./layouts/MainLayout";
@@ -18,7 +19,7 @@ function App() {
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<MainLayout />}>
-          <Route index element={<Navigate to="/login" replace />} />
+          <Route index element={<Navigate to="/home" replace />} />
                       <Route path="/accounts" element={<Accounts />} />
             <Route path="/accounts/:id" element={<AccountDetails />} />
             <Route path="/cards" element={<Cards />}></Route>
@@ -26,6 +27,7 @@ function App() {
             <Route path="/transactions" element={<Transactions/>}></Route>
             <Route path="/applycard" element={<ApplyCard/>} />
           </Route>
+          <Route path="/home" element={<Home/>} />
           <Route path="/signup" element={<SignUp/>} ></Route>
         <Route path="/login" element={<LogIn/>} />
         </Routes>
