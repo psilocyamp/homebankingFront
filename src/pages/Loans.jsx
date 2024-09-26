@@ -207,7 +207,7 @@ setIsModalOpen(false);
                 className="mb-6"
               />
             )}
-            <ButtonSubmit label="Apply Now"  />
+            <ButtonSubmit label="Apply Now" onClick={() =>{handleOpenModal}} />
           </FormContainer>
         </div>
         <ConfirmationModal 
@@ -220,7 +220,7 @@ setIsModalOpen(false);
           { label: "Payments", value: loanDetails.payments},
         ]}
         onConfirm={() => {
-          handleConfirm
+          handleConfirm();
           console.log("Confirmed loan details", { type, account, amount, payments: selectedPayment });
           setIsModalOpen(false); // Close the modal after confirmation
         }}

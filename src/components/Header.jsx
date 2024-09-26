@@ -13,7 +13,7 @@ const Header = () => {
       </div>
       
       <div className="flex flex-col md:flex-row md:items-center md:space-x-6 flex-grow mt-4 md:mt-0 md:justify-center">
-        <Button title="Accounts" to="/" className="text-xs md:text-sm px-4 py-2 md:px-6 md:py-2.5" />
+        <Button title="Accounts" to="/accounts" className="text-xs md:text-sm px-4 py-2 md:px-6 md:py-2.5" />
         <Button title="Cards" to="/cards" className="text-xs md:text-sm px-4 py-2 md:px-6 md:py-2.5" />
         <Button title="Loans" to="/loans" className="text-xs md:text-sm px-4 py-2 md:px-6 md:py-2.5" />
         <Button title="Transactions" to="/transactions" className="text-xs md:text-sm px-4 py-2 md:px-6 md:py-2.5" />
