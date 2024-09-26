@@ -207,7 +207,7 @@ setIsModalOpen(false);
                 className="mb-6"
               />
             )}
-            <ButtonSubmit label="Apply Now" onClick={() =>{handleOpenModal}} />
+            <ButtonSubmit label="Apply Now" onClick={handleOpenModal}  />
           </FormContainer>
         </div>
         <ConfirmationModal 
