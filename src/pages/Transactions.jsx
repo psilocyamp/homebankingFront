@@ -16,7 +16,7 @@ const Transaction = () => {
   const [destinationAccount, setDestinationAccount] = useState('');
   const [amount, setAmount] = useState("");
   const [description, setDescription] = useState("");
-
+  
 
   const [errorMessage, setErrorMessage] = useState(""); 
   const [successMessage, setSuccessMessage] = useState("");
@@ -61,7 +61,7 @@ const Transaction = () => {
       setErrorMessage("Source and destination accounts cannot be the same.");
       return;
     }
-    if (!amount || amount <= 0) {
+    if (!amount || amount <= 0) { // Validate rawAmount
       setErrorMessage("Please enter a valid amount.");
       return;
     }
@@ -82,7 +82,7 @@ const Transaction = () => {
     const transactionData = {
       sourceAccount: sourceAccount,
       destinationAccount: destinationAccount,
-      amount,
+      amount: amount,
       description,
     };
     console.log(transactionData);
@@ -109,6 +109,26 @@ const Transaction = () => {
     setSuccessMessage("");
   
   };
+   // Manejar el cambio en el campo de entrada del monto
+   const handleAmountChange = (e) => {
+    const inputValue = e.target.value;
+    const cleanValue = cleanNumber(inputValue);  // Elimina las comas del valor ingresado
+
+    // Actualiza el estado formateando el número con comas
+    setAmount(formatNumberWithCommas(cleanValue));
+  };
+// Función para formatear el número con comas
+const formatNumberWithCommas = (num) => {
+  if (!num) return '';
+  const parts = num.toString().split('.');
+  parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ',');  // Agrega comas
+  return parts.join('.');
+};
+
+// Función para limpiar el número, eliminando comas y espacios
+const cleanNumber = (num) => {
+  return num.replace(/,/g, '').replace(/ /g, '');
+};
 
 
   return (
@@ -182,13 +202,13 @@ const Transaction = () => {
                                     className="mb-4"
                 />
               )}
-              <InputField
-                type="text"
-                value={amount.toLocaleString()}
-                placeholder="Enter Amount"
-                onChange={(e) => setAmount(e.target.value)}
-                className="mb-4"
-              />
+               <InputField
+              type="text"
+              value={amount}
+              placeholder="Enter Amount"
+              onChange={handleAmountChange} 
+              className="mb-4"
+            />
               <InputField
                 type="text"
                 placeholder="Enter Description"
