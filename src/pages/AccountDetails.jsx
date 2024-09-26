@@ -37,31 +37,6 @@ if (!account) {
     return <p className="text-center text-gray-500">Account not found</p>;
 }
 
-
-    // useEffect(() => {
-    //     // Fetch account details from the API
-    //     axios.get(`http://localhost:8080/api/accounts/${id}`)
-    //         .then(response => {
-    //             setAccount(response.data);
-    //         })
-    //         .catch(error => {
-    //             console.error('Error fetching account details:', error);
-    //         });
-
-    //     // Fetch transactions for the account
-    //     axios.get(`http://localhost:8080/api/accounts/${id}/transactions`)
-    //         .then(response => {
-    //             setTransactions(response.data);
-    //         })
-    //         .catch(error => {
-    //             console.error('Error fetching transactions:', error);
-    //         });
-    // }, [id]);
-
-    // if (!account) {
-    //     return <p className="text-center text-gray-500">Loading account details...</p>;
-    // }
-
     return (
         <div className="bg-gradient-to-b from-gray-100 to-gray-200 min-h-screen">
             <BannerTitle 

@@ -52,7 +52,7 @@ if (!password || password.trim().length === 0) {
 }
 
   try {
-    const res= await axios.post("http://localhost:8080/api/auth/register", user);
+    const res= await axios.post("https://homebanking-42y9.onrender.com/api/auth/register", user);
     console.log(res.data);
     
     localStorage.setItem("token", res.data);

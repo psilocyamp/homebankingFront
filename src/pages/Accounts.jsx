@@ -40,7 +40,7 @@ const handleConfirm = async () => {
  
   axios
     .post(
-      "http://localhost:8080/api/clients/current/accounts",
+      "https://homebanking-42y9.onrender.com/api/clients/current/accounts",
       null,
       {
         headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },

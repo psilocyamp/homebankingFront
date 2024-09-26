@@ -9,7 +9,7 @@ const ClientData = () => {
 
     useEffect(() => {
       axios
-        .get("http://localhost:8080/api/clients/1")
+        .get("https://homebanking-42y9.onrender.com/api/clients/1")
         .then((response) => {
           setClient(response.data);
         })

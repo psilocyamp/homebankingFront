@@ -30,7 +30,7 @@ const Loans = () => {
   useEffect(() => {
     dispatch(loadClient());
     axios
-      .get("http://localhost:8080/api/loans/", {
+      .get("https://homebanking-42y9.onrender.com/api/loans/", {
         headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
       })
       .then((response) => {
@@ -126,7 +126,7 @@ const Loans = () => {
 
   const handleConfirm = () => {
 axios
-.post("http://localhost:8080/api/loans/", loanDetails,
+.post("https://homebanking-42y9.onrender.com/api/loans/", loanDetails,
    {
   headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
 })

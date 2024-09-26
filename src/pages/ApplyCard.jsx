@@ -32,7 +32,7 @@ const ApplyCard = () => {
   }
   console.log(selectedData);
   axios
-.post("http://localhost:8080/api/clients/current/cards", selectedData, {
+.post("https://homebanking-42y9.onrender.com/api/clients/current/cards", selectedData, {
   headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
 }).then((response) => {
   console.log(response.data);
