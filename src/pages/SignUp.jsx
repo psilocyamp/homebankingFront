@@ -9,7 +9,7 @@ import { useDispatch } from 'react-redux';
 import axios from 'axios';
 
 
-const SignUpForm = () => {
+const SignUp = () => {
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
@@ -143,4 +143,4 @@ if (!password || password.trim().length === 0) {
 };
 
 
-export default SignUpForm;
+export default SignUp;
