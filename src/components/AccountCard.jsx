@@ -5,9 +5,6 @@ import { useNavigate } from 'react-router-dom';
 const AccountCard = ({ singleCard = false, account }) => {
     const navigate = useNavigate();
 
-    // Si se pasa un accountId, buscamos esa cuenta específica en el array de cuentas
-    // const account = singleCard && accountId ? accounts.find(acc => acc.id === accountId) : {};
-
     const handleCardClick = () => {
         if (account && account.id) {
             navigate(`/accounts/${account.id}`);
@@ -16,6 +13,12 @@ const AccountCard = ({ singleCard = false, account }) => {
 
     const formattedDate = date => new Date(date).toLocaleDateString();
 
+    const formatNumberWithCommas = (num) => {
+        if (!num) return '';
+        const parts = num.toString().split('.');
+        parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+        return parts.join('.');
+    };
     const cardClassName = `
         w-full max-w-xs lg:max-w-md xl:max-w-lg 
         bg-white rounded-lg shadow-lg 
@@ -44,7 +47,7 @@ const AccountCard = ({ singleCard = false, account }) => {
                     Account Number: {account.number}
                 </h3>
                 <p className="text-md font-semibold text-gray-700 mt-1">
-                    Amount: ${typeof account.balance === 'number' ? account.balance.toFixed(2) : 'N/A'}
+                    Amount: ${typeof account.balance === 'number' ? formatNumberWithCommas(account.balance.toFixed(2)) : 'N/A'}
                 </p>
                 <div className="mt-4 border-t border-gray-200 pt-4 text-gray-500 text-sm">
                     Created on: {formattedDate(account.creationDate)} 

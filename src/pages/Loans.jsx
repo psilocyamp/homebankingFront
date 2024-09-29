@@ -94,10 +94,18 @@ const Loans = () => {
     amount: amount,
     payments: selectedPayment,
     destinationAccount: account,
+    
   };
 
   const handleOpenModal = (event) => {
     event.preventDefault();
+
+ // Limpiar mensajes de error antes de validar
+ setTypeError("");
+ setSourceAccountError("");
+ setAmountError("");
+ setPaymentError("");
+
     if (!type || type <= 0) {
       setTypeError("Please enter a valid type.");
       return;
@@ -106,32 +114,46 @@ const Loans = () => {
       setSourceAccountError("Please enter a valid account.");
       return;
     }setSourceAccountError("");
-    if (!amount || amount <= 0) {
-      setAmountError("Please enter a valid amount.");
-      return;
-    }setAmountError("");
-    if (amount < amount) {
-      setAmountError(`Exceeds the allowed amount (${amount}).`);
-      return;
-    }setAmountError("");
+     // Validate amount
+  const amountValue = parseFloat(amount.replace(/,/g, '')); // Clean and convert amount
+  if (!amountValue || amountValue <= 0) {
+    setAmountError("Please enter a valid amount.");
+    return;
+  }
+  
+  // Check if amount exceeds maxAmount
+  if (amountValue > maxAmount) {
+    setAmountError(`Amount exceeds the allowed maximum amount of $${formatNumberWithCommas(maxAmount)}.`);
+    return;
+  }
     if (!selectedPayment || selectedPayment <= 0) {
       setPaymentError("Please enter valid installments.");
       return;
     }setPaymentError("");
-    // Abrir el modal de confirmación
-    setIsModalOpen(true);
-    setErrorMessage(""); // Limpiar mensajes de error si los hay
     
+   
+      setIsModalOpen(true);
+      setErrorMessage(""); // Limpiar mensajes de error
+      setTypeError("");
+      setSourceAccountError("");
+      setAmountError("");
+      setPaymentError("");
+  
+
     
     
     
   };
 
   const handleConfirm = () => {
+    const cleanedAmount = cleanNumber(amount); 
     axios
       .post(
         "https://homebanking-42y9.onrender.com/api/loans/",
-        loanDetails,
+        {
+          ...loanDetails,
+          amount: cleanedAmount, // Usar el valor limpiado
+        },
         {
           headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
         }
@@ -146,6 +168,8 @@ const Loans = () => {
         ConfirmationModal(error.response.data); 
       });
     setIsModalOpen(false);
+    console.log(loanDetails);
+
   };
 
   // Función para formatear el número con comas
@@ -239,20 +263,18 @@ const cleanNumber = (num) => {
                     label: account.number,
                     value: account.number,
                   }))}
-                  placeholder="Select Source Account"
+                  placeholder="Select Destination Account"
                   className="mb-4"
                   onChange={handleAccountChange}
                 />
                  
-                {maxAmount && (
-                  <InputField
-                    type="text"
-                    placeholder={`Enter Amount (max: ${maxAmount})`}
-                    value={amount}
-                    onChange={(e)=>setAmount(e.target.value)}
-                    className="mb-4"
-                  />
-                )}
+                 <InputField
+  type="text"
+  placeholder={`Enter Amount (max: ${maxAmount})`}
+  value={amount}
+  onChange={(e) => setAmount(formatNumberWithCommas(cleanNumber(e.target.value)))}
+  className="mb-4"
+/>
                  
                 {payments.length > 0 && (
                   <SelectField

@@ -11,6 +11,7 @@ import { loadClient } from '../redux/actions/authenticationAction';
 const LoginForm = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -46,6 +47,9 @@ const LoginForm = () => {
       console.error("Error logging in:", error);
       setErrorMessage("Invalid email or password");
     }
+  };
+  const togglePasswordVisibility = () => {
+    setShowPassword(!showPassword); 
   };
 
   return (
@@ -89,31 +93,65 @@ const LoginForm = () => {
                 />
               }
             />
+ <div className="relative">
+  <InputField
+    type={showPassword ? "text" : "password"}  // Cambia el tipo de password a texto si está visible
+    name="password"
+    placeholder="Password"
+    title="Password"
+    value={password}
+    onChange={(e) => setPassword(e.target.value)}
+  />
+  <span
+    onClick={togglePasswordVisibility}
+    className="absolute inset-y-0 right-0 pr-3 flex items-center cursor-pointer"
+  >
+      {showPassword ? (
+            <svg
+              className="h-6 w-6"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="2"
+                d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
+              />
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="2"
+                d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
+              />
+            </svg>
+          ) : (
+            <svg
+              className="h-6 w-6"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="2"
+                d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.542-7a10.05 10.05 0 011.658-2.953M15 12a3 3 0 11-6 0 3 3 0 016 0z"
+              />
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="2"
+                d="M17.657 16.657L13.875 18.825M12 5a10.05 10.05 0 011.875.175M19.542 12c-.274-1.034-.732-1.994-1.342-2.83M15 12a3 3 0 00-6 0M6.343 7.343L13.875 18.825"
+              />
+            </svg>
+    )}
+  </span>
+</div>
 
-            <InputField
-              type="password"
-              name="password"
-              placeholder="Password"
-              title="Password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              icon={
-                <>
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="2"
-                    d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
-                  />
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="2"
-                    d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
-                  />
-                </>
-              }
-            />
 
             <ButtonSubmit label="Log In" className="bg-indigo-600 text-white w-full py-3 rounded-full mt-6" />
 

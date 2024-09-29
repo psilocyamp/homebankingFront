@@ -4,6 +4,8 @@ import CardMembershipSelect from '../components/CardMembershipSelect';
 import BannerTitle from '../components/BannerTitle';
 import { useDispatch, useSelector } from 'react-redux';
 import { addCardToClient } from '../redux/actions/authenticationAction';
+import { useNavigate } from 'react-router-dom';
+
 import ConfirmationModal from "../components/ConfirmationModal"; 
 import { loadClient } from "../redux/actions/authenticationAction";
 import axios from 'axios';
@@ -13,7 +15,7 @@ const ApplyCard = () => {
   const [selectedMembership, setSelectedMembership] = useState('');
   const [errorMessage, setErrorMessage] = useState(""); 
   const [successMessage, setSuccessMessage] = useState("");
-
+  const navigate = useNavigate();
   const [isModalOpen, setIsModalOpen] = useState(false); 
 
   const dispatch = useDispatch();
@@ -37,27 +39,34 @@ const ApplyCard = () => {
 }).then((response) => {
   console.log(response.data);
   setSuccessMessage("Card created succefully!");
-  
+  // Establece un tiempo antes de redirigir (por ejemplo, 3 segundos)
+  setTimeout(() => {
+    navigate('/cards'); // Redirige después de 3 segundos
+  }, 3000); // 3000 ms = 3 segundos
   })
   .catch((error) => {
     setIsModalOpen(false);
-  console.error("Error fetching data:", error);
-  setErrorMessage("An error occurred. Please try again.");
   });
   setErrorMessage("");
   setSuccessMessage("");
 }
 
   const handleApply = () => {
-  if (!selectedCardType || !selectedMembership) {
-  setErrorMessage('Please select both card type and membership.');
-  return;
-  }
-  if(client.cards.find (card => card.type === selectedCardType && card.color === selectedMembership)){
-    setErrorMessage('You already have a card of this type and color.');
-    return;
-  }
-  setIsModalOpen(true);
+    if (!selectedCardType || !selectedMembership) {
+      setErrorMessage('Please select both card type and membership.');
+      return;
+    }
+    
+    // Check if the card type and color already exist in the client's cards
+    if (client?.cards?.find(card => 
+        card.type.toLowerCase() === selectedCardType.toLowerCase() && 
+        card.color.toLowerCase() === selectedMembership.toLowerCase())) {
+      setErrorMessage('You already have a card of this type and color.');
+      return;
+    }
+  
+    // Open the confirmation modal if validation passes
+    setIsModalOpen(true);
 
 }
 
