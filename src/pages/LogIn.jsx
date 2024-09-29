@@ -44,8 +44,8 @@ const LoginForm = () => {
       navigate("/accounts");
 
     } catch (error) {
-      console.error("Error logging in:", error);
-      setErrorMessage("Invalid email or password");
+      console.error("Error logging in:", error.response || error);
+  setErrorMessage(error.response?.data?.message || "Invalid email or password"); // Adjust based on your API response structure
     }
   };
   const togglePasswordVisibility = () => {

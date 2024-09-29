@@ -1,10 +1,10 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState , useRef} from "react";
 import FormContainer from "../components/FormContainer";
 import InputField from "../components/InputField";
 import SelectField from "../components/SelectField";
 import ButtonSubmit from "../components/ButtonSubmit";
 import { useDispatch, useSelector } from "react-redux";
-import ConfirmationModal from "../components/ConfirmationModal"; 
+import ConfirmationModal from "../components/ConfirmationModal";
 import { loadClient } from "../redux/actions/authenticationAction";
 import LoanCard from "../components/LoanCard";
 import axios from "axios";
@@ -30,6 +30,9 @@ const Loans = () => {
 
   const dispatch = useDispatch();
   const client = useSelector((state) => state.authenticationReducer.client);
+
+// Create a ref for the loans section
+const loansRef = useRef(null);
 
   useEffect(() => {
     dispatch(loadClient());
@@ -94,59 +97,59 @@ const Loans = () => {
     amount: amount,
     payments: selectedPayment,
     destinationAccount: account,
-    
   };
 
   const handleOpenModal = (event) => {
     event.preventDefault();
 
- // Limpiar mensajes de error antes de validar
- setTypeError("");
- setSourceAccountError("");
- setAmountError("");
- setPaymentError("");
+    // Limpiar mensajes de error antes de validar
+    setTypeError("");
+    setSourceAccountError("");
+    setAmountError("");
+    setPaymentError("");
 
     if (!type || type <= 0) {
       setTypeError("Please enter a valid type.");
       return;
-    }setTypeError("");
+    }
+    setTypeError("");
     if (!account) {
       setSourceAccountError("Please enter a valid account.");
       return;
-    }setSourceAccountError("");
-     // Validate amount
-  const amountValue = parseFloat(amount.replace(/,/g, '')); // Clean and convert amount
-  if (!amountValue || amountValue <= 0) {
-    setAmountError("Please enter a valid amount.");
-    return;
-  }
-  
-  // Check if amount exceeds maxAmount
-  if (amountValue > maxAmount) {
-    setAmountError(`Amount exceeds the allowed maximum amount of $${formatNumberWithCommas(maxAmount)}.`);
-    return;
-  }
+    }
+    setSourceAccountError("");
+    // Validate amount
+    const amountValue = parseFloat(amount.replace(/,/g, "")); // Clean and convert amount
+    if (!amountValue || amountValue <= 0) {
+      setAmountError("Please enter a valid amount.");
+      return;
+    }
+
+    // Check if amount exceeds maxAmount
+    if (amountValue > maxAmount) {
+      setAmountError(
+        `Amount exceeds the allowed maximum amount of $${formatNumberWithCommas(
+          maxAmount
+        )}.`
+      );
+      return;
+    }
     if (!selectedPayment || selectedPayment <= 0) {
       setPaymentError("Please enter valid installments.");
       return;
-    }setPaymentError("");
-    
-   
-      setIsModalOpen(true);
-      setErrorMessage(""); // Limpiar mensajes de error
-      setTypeError("");
-      setSourceAccountError("");
-      setAmountError("");
-      setPaymentError("");
-  
+    }
+    setPaymentError("");
 
-    
-    
-    
+    setIsModalOpen(true);
+    setErrorMessage(""); // Limpiar mensajes de error
+    setTypeError("");
+    setSourceAccountError("");
+    setAmountError("");
+    setPaymentError("");
   };
 
   const handleConfirm = () => {
-    const cleanedAmount = cleanNumber(amount); 
+    const cleanedAmount = cleanNumber(amount);
     axios
       .post(
         "https://homebanking-42y9.onrender.com/api/loans/",
@@ -162,37 +165,50 @@ const Loans = () => {
         console.log(response.data);
         setSuccessMessage("Loan generated successfully!");
         dispatch(loadClient());
+
+        // Scroll to the loans section after 3 seconds
+        setTimeout(() => {
+          if (loansRef.current) {
+            loansRef.current.scrollIntoView({ behavior: "smooth" });
+          }
+        }, 3000);
       })
       .catch((error) => {
         console.error("Error fetching data:", error);
-        ConfirmationModal(error.response.data); 
+        ConfirmationModal(error.response.data);
       });
     setIsModalOpen(false);
-    console.log(loanDetails);
 
+    setAmount("");
+    setSelectedPayment(null);
+    setAccount("");
+    setSuccessMessage("");
+    setErrorMessage("");
   };
 
   // Función para formatear el número con comas
-const formatNumberWithCommas = (num) => {
-  if (!num) return '';
-  const parts = num.toString().split('.');
-  parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ',');  // Agrega comas
-  return parts.join('.');
-};
+  const formatNumberWithCommas = (num) => {
+    if (!num) return "";
+    const parts = num.toString().split(".");
+    parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ","); // Agrega comas
+    return parts.join(".");
+  };
 
-// Función para limpiar el número, eliminando comas y espacios
-const cleanNumber = (num) => {
-  return num.replace(/,/g, '').replace(/ /g, '');
-};
-
+  // Función para limpiar el número, eliminando comas y espacios
+  const cleanNumber = (num) => {
+    return num.replace(/,/g, "").replace(/ /g, "");
+  };
 
   return (
-    <div className="bg-gradient-to-b from-gray-100 to-gray-200 min-h-screen">
+    <div ref={loansRef} className="bg-gradient-to-b from-gray-100 to-gray-200 min-h-screen">
       {/* Header Section */}
       <div className="text-center py-12">
-        <h1 className="text-3xl font-bold text-gray-800">Your Loans Overview</h1>
+        <h1 className="text-3xl font-bold text-gray-800">
+          Your Loans Overview
+        </h1>
         <p className="text-lg text-gray-600 mt-2">
-          Explore details of the loans you’ve taken with us and get an overview of your financial situation.
+          Explore details of the loans you’ve taken with us and get an overview
+          of your financial situation.
         </p>
       </div>
 
@@ -221,10 +237,12 @@ const cleanNumber = (num) => {
         <>
           {/* Header Section */}
           <div className="text-center py-12">
-            <h1 className="text-3xl font-bold text-gray-800">Apply for a Loan</h1>
+            <h1 className="text-3xl font-bold text-gray-800">
+              Apply for a Loan
+            </h1>
             <p className="text-lg text-gray-600 mt-2">
-              Complete the form below to apply for your desired loan. We’ll help you
-              every step of the way.
+              Complete the form below to apply for your desired loan. We’ll help
+              you every step of the way.
             </p>
           </div>
           <div className="container mx-auto px-4 py-8">
@@ -233,19 +251,25 @@ const cleanNumber = (num) => {
               <FormContainer
                 title="Loan Application Form"
                 description="Select your loan type, source account, amount, and number of installments."
-              >{typeError && (
-                <p className="text-red-500 text-sm mb-4">{typeError}</p>
-              )}    {sourceAccountError && (
-                <p className="text-red-500 text-sm mb-4">{sourceAccountError}</p>
-              )}
-                  {amountError && (
+              >
+                {typeError && (
+                  <p className="text-red-500 text-sm mb-4">{typeError}</p>
+                )}{" "}
+                {sourceAccountError && (
+                  <p className="text-red-500 text-sm mb-4">
+                    {sourceAccountError}
+                  </p>
+                )}
+                {amountError && (
                   <p className="text-red-500 text-sm mb-4">{amountError}</p>
                 )}
-                    {paymentError && (
+                {paymentError && (
                   <p className="text-red-500 text-sm mb-4">{paymentError}</p>
                 )}
                 {successMessage && (
-                  <p className="text-green-500 text-sm mb-4">{successMessage}</p>
+                  <p className="text-green-500 text-sm mb-4">
+                    {successMessage}
+                  </p>
                 )}
                 <SelectField
                   options={availableLoans.map((loan) => ({
@@ -257,7 +281,6 @@ const cleanNumber = (num) => {
                   campo="nameLoan"
                   onChange={handleLoanTypeChange}
                 />
-                  
                 <SelectField
                   options={client.accounts?.map((account) => ({
                     label: account.number,
@@ -267,15 +290,19 @@ const cleanNumber = (num) => {
                   className="mb-4"
                   onChange={handleAccountChange}
                 />
-                 
-                 <InputField
-  type="text"
-  placeholder={`Enter Amount (max: ${maxAmount})`}
-  value={amount}
-  onChange={(e) => setAmount(formatNumberWithCommas(cleanNumber(e.target.value)))}
-  className="mb-4"
-/>
-                 
+                <InputField
+                  type="text"
+                  placeholder={`Enter Amount (max: $${formatNumberWithCommas(
+                    maxAmount
+                  )})`}
+                  value={amount}
+                  onChange={(e) =>
+                    setAmount(
+                      formatNumberWithCommas(cleanNumber(e.target.value))
+                    )
+                  }
+                  className="mb-4"
+                />
                 {payments.length > 0 && (
                   <SelectField
                     options={payments.map((payment) => ({
@@ -288,7 +315,6 @@ const cleanNumber = (num) => {
                     className="mb-6"
                   />
                 )}
-                 
                 <ButtonSubmit label="Apply Now" onClick={handleOpenModal} />
               </FormContainer>
             </div>
@@ -319,4 +345,3 @@ const cleanNumber = (num) => {
 };
 
 export default Loans;
-

@@ -1,5 +1,17 @@
 import React from 'react';
 
+export const formatNumberWithCommas = (num) => {
+  if (!num) return '';
+  const parts = num.toString().split('.');
+  parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ','); // Add commas
+  return parts.join('.');
+};
+
+export const cleanNumber = (num) => {
+  return num.replace(/,/g, '').replace(/ /g, '');
+};
+
+
 const TransactionTable = (props) => {
   return (
     <div className="w-full max-w-2xl p-4 bg-white shadow-md rounded-lg">
@@ -16,13 +28,13 @@ const TransactionTable = (props) => {
         </thead>
         <tbody>
           {props.transactions.map(transaction => (
-            <tr key={transaction.id} className="hover:bg-blue-50">
-              <td className="p-2 border-b text-gray-700">{transaction.type}</td>
-              <td className="p-2 border-b text-gray-700">${transaction.amount.toFixed(2)}</td>
-              <td className="p-2 border-b text-gray-700">{transaction.date.slice(0, 10)}</td>
-              <td className="p-2 border-b text-gray-700">{transaction.date.slice(11, 16)}</td>
-              <td className="p-2 border-b text-gray-700">{transaction.description || 'N/A'}</td>
-            </tr>
+               <tr key={transaction.id} className="hover:bg-blue-50">
+               <td className="p-2 border-b text-gray-700">{transaction.type}</td>
+               <td className="p-2 border-b text-gray-700">${formatNumberWithCommas(transaction.amount.toFixed(2))}</td>
+               <td className="p-2 border-b text-gray-700">{transaction.date.slice(0, 10)}</td>
+               <td className="p-2 border-b text-gray-700">{transaction.date.slice(11, 16)}</td>
+               <td className="p-2 border-b text-gray-700">{transaction.description || 'N/A'}</td>
+             </tr>
           ))}
         </tbody>
       </table>

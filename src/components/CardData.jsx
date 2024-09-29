@@ -6,7 +6,7 @@ const CardData = ({ cardType }) => {
   const client = useSelector(state => state.authenticationReducer.client);
  
   if (!client.cards || client.cards.length === 0) {
-    return <p>Loading cards data...</p>;
+    return <p>You don't have any {cardType.toLowerCase()} cards yet.</p>;
   }
   const filteredCards = client.cards.filter(card => card.type === cardType);
 
